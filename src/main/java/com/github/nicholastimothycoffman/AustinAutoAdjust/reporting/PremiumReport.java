@@ -1,0 +1,1 @@
+// Entity for premium reports.

@@ -1,4 +1,4 @@
-package github.com.nicholastimothycoffman.AustinAutoAdjust;
+package com.github.nicholastimothycoffman.AustinAutoAdjust;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

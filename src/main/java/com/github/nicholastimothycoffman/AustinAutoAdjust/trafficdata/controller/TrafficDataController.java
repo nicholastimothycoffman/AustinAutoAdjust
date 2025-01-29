@@ -1,7 +1,7 @@
-package github.com.nicholastimothycoffman.AustinAutoAdjust.trafficdata.controller;
+package com.github.nicholastimothycoffman.AustinAutoAdjust.trafficdata.controller;
 
-import github.com.nicholastimothycoffman.AustinAutoAdjust.trafficdata.model.TrafficData;
-import github.com.nicholastimothycoffman.AustinAutoAdjust.trafficdata.service.TrafficDataService;
+import com.github.nicholastimothycoffman.AustinAutoAdjust.trafficdata.model.TrafficData;
+import com.github.nicholastimothycoffman.AustinAutoAdjust.trafficdata.service.TrafficDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ public class TrafficDataController {
 
     	@PostMapping
     	public ResponseEntity<TrafficData> createTrafficData(@RequestBody TrafficData trafficData) {
-        	TrafficData savedData = service.saveTrafficData(trafficData);
+		TrafficData savedData = service.saveTrafficData(trafficData);
         	return ResponseEntity.ok(savedData);
     	}
 

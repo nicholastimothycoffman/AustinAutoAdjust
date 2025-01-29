@@ -1,8 +1,8 @@
-package github.com.nicholastimothycoffman.AustinAutoAdjust.traffic.model;
+package com.github.nicholastimothycoffman.AustinAutoAdjust.trafficdata.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import java.time.localDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 public class TrafficData {
@@ -28,12 +28,16 @@ public class TrafficData {
 		return id;
 	}
 
-	public void setID(Long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public LocalDateTime getTimeStamp() {
+	public LocalDateTime getTimestamp() {
 		return timestamp;
+	}
+
+	public void setTimestamp(LocalDateTime timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public String getLocation() {
@@ -60,3 +64,4 @@ public class TrafficData {
 		this.trafficVolume = trafficVolume;
 	}
 }
+

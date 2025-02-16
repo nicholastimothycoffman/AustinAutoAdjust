@@ -55,11 +55,17 @@ public class TrafficDataControllerTests {
     		@Bean
     		public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         		http
-            			.csrf(csrf -> csrf.disable())  // Disable CSRF for test environment
-            			.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+            			.csrf(csrf -> csrf.disable())  // Disable CSRF for tests
+            			.authorizeHttpRequests(auth -> auth
+                			.requestMatchers("/traffic-data").permitAll()
+                			.anyRequest().authenticated())  // Authenticate all other requests
+            			.formLogin(form -> form.disable()) // Disable form login (optional)
+            			.httpBasic(httpBasic -> httpBasic.disable());  // Avoid deprecated method
+
         		return http.build();
     		}
 	}
+
 
 
 	@Test
@@ -67,29 +73,23 @@ public class TrafficDataControllerTests {
     		System.out.println("Registered Modules: " + objectMapper.getRegisteredModuleIds());
 	}
 
+	@Test
+	@WithMockUser(username = "testuser", roles = {"USER"})  // Ensure role matches SecurityConfig
+	public void testCreateTrafficData() throws Exception {
+    		TrafficData trafficData = new TrafficData();
+    		trafficData.setTimestamp(LocalDateTime.now());
+    		trafficData.setLocation("Downtown Austin");
+    		trafficData.setSpeed(50.0);
+    		trafficData.setTrafficVolume(200);
 
-    	@Test
-	@WithMockUser(username = "testuser", roles = {"USER"})
-    	public void testCreateTrafficData() throws Exception {
-        	TrafficData trafficData = new TrafficData();
-        	trafficData.setTimestamp(LocalDateTime.now());
-        	trafficData.setLocation("Downtown Austin");
-        	trafficData.setSpeed(50.0);
-        	trafficData.setTrafficVolume(200);
+    		String json = objectMapper.writeValueAsString(trafficData);  // Use injected ObjectMapper
 
-  		// Log registered modules for debugging
-    		ObjectMapper mapper = new ObjectMapper();
-    		mapper.registerModule(new JavaTimeModule());
-		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-    		System.out.println("Registered Modules: " + mapper.getRegisteredModuleIds());
+    		mockMvc.perform(post("/traffic-data")
+            		.contentType(MediaType.APPLICATION_JSON)
+            		.content(json))
+            		.andExpect(status().isOk())  // Expect 200 OK if authentication is correct
+            		.andExpect(jsonPath("$.id").exists());
+	}
 
- 		String json = objectMapper.writeValueAsString(trafficData);
-
-        	mockMvc.perform(post("/traffic-data")
-                	.contentType(MediaType.APPLICATION_JSON)
-                	.content(json))
-                	.andExpect(status().isOk())
-                	.andExpect(jsonPath("$.id").exists());
-    	}
 }
 

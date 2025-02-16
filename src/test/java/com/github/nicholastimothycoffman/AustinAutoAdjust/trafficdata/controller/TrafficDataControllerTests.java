@@ -54,11 +54,13 @@ public class TrafficDataControllerTests {
 	static class TestSecurityConfig {
     		@Bean
     		public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-			http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-    				.csrf().disable();
-			return http.build();
+        		http
+            			.csrf(csrf -> csrf.disable())  // Disable CSRF for test environment
+            			.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+        		return http.build();
     		}
 	}
+
 
 	@Test
 	public void logObjectMapperModules() {
@@ -85,7 +87,7 @@ public class TrafficDataControllerTests {
 
         	mockMvc.perform(post("/traffic-data")
                 	.contentType(MediaType.APPLICATION_JSON)
-                	.content(objectMapper.writeValueAsString(trafficData)))
+                	.content(json))
                 	.andExpect(status().isOk())
                 	.andExpect(jsonPath("$.id").exists());
     	}

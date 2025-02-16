@@ -14,12 +14,13 @@ public class AustinAutoAdjustApplication {
         	SpringApplication.run(AustinAutoAdjustApplication.class, args);
     	}
 
-    	// Register the JavaTimeModule with ObjectMapper
-    	@Bean
-    	public ObjectMapper objectMapper() {
-        	ObjectMapper mapper = new ObjectMapper();
-        	mapper.registerModule(new JavaTimeModule());
-        	return mapper;
-    	}
+	@Bean
+	public ObjectMapper objectMapper() {
+    		ObjectMapper mapper = new ObjectMapper();
+    		mapper.registerModule(new JavaTimeModule());
+    		mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    		return mapper;
+	}
+
 }
 

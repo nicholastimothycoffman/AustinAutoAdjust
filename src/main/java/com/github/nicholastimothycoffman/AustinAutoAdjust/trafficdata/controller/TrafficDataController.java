@@ -29,10 +29,11 @@ public class TrafficDataController {
         	return ResponseEntity.ok(dataList);
     	}
 
-    	@GetMapping("/{id}")
-    	public ResponseEntity<Optional<TrafficData>> getTrafficDataById(@PathVariable Long id) {
-        	Optional<TrafficData> data = service.getTrafficDataById(id);
-        	return data.isPresent() ? ResponseEntity.ok(data) : ResponseEntity.notFound().build();
-    	}
+	@GetMapping("/{id}")
+	public ResponseEntity<TrafficData> getTrafficDataById(@PathVariable Long id) {
+    		return service.getTrafficDataById(id)
+        		.map(ResponseEntity::ok)
+        		.orElseGet(() -> ResponseEntity.notFound().build());
+	}
 }
 

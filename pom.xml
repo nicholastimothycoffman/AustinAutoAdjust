@@ -62,6 +62,7 @@
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
+			<version>3.3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -76,6 +77,7 @@
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka-test</artifactId>
+			<version>3.3.2</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

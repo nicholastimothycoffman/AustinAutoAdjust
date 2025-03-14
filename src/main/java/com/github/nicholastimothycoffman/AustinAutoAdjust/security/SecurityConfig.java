@@ -11,10 +11,21 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+/**
+ * Security configuration class for handling authentication and authorization.
+ * This class sets up security filter chains and manages user authentication.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+	/**
+	 * Configures HTTP security settings for the application.
+	 * 
+	 * @param http the HttpSecurity object used to configure security settings.
+	 * @return A SecurityFilterChain defining security rules for API access.
+	 * @throws Exception If an error occurs while configuring security.
+	 */
     	@Bean
     	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         	http
@@ -29,12 +40,16 @@ public class SecurityConfig {
         	return http.build();
     	}
 
-    	// Add an in-memory user for testing
+	/**
+ 	 * Creates an in-memory user for testing authentication.
+	 * 
+	 * @return An InMemoryUserDetailsManager with a test user.
+	 */
     	@Bean
     	public InMemoryUserDetailsManager userDetailsService() {
         	UserDetails user = User.withUsername("user")
             		.password("{noop}password")  // `{noop}` disables password encoding for testing
-            		.roles("USER")  // Ensure role is correctly set as "USER"
+            		.roles("USER")  // Assigns the "USER" role
             		.build();
         	return new InMemoryUserDetailsManager(user);
     	}

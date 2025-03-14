@@ -29,20 +29,37 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+/**
+ * Integration tests for TrafficDataController.
+ * This class tests the API endpoints related to traffic data operations.
+ */
 @SpringBootTest(classes = AustinAutoAdjustApplication.class)
 @AutoConfigureMockMvc
 public class TrafficDataControllerTests {
 
+	/**
+ 	 * MockMvc instance for performing HTTP requests in tests.
+	 */
 	@Autowired
     	private MockMvc mockMvc;
 
+	/**
+	 * ObjectMapper for serializing and deserializing JSON data.
+	 */
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	/**
+	 * Configuration class for registering an ObjectMapper with JavaTimeModule support.
+	 */
  	@Configuration
     	static class TestConfig {
-        	@Bean
+        
+		/**
+		 * Provides an ObjectMapper bean with JavaTimeModule registered.
+		 * @return The configured ObjectMapper instance.
+	 	 */
+		@Bean
         	public ObjectMapper objectMapper() {
             		ObjectMapper mapper = new ObjectMapper();
             		mapper.registerModule(new JavaTimeModule());
@@ -50,9 +67,19 @@ public class TrafficDataControllerTests {
         	}
     	}
 
+	/**
+	 * Test security configuration for disabling CSRF and allowing unauthenticated requests.
+	 */
 	@TestConfiguration
 	static class TestSecurityConfig {
-    		@Bean
+    	
+		/**
+		 * Configures security settings for tests, disabling CSRF and authentication for specific endpoints.
+		 * @param http The HttpSecurity object used to configure security settings.
+		 * @return A configured SecurityFilterChain.
+		 * @throws Exception If an error occurs while configuring security.
+		 */
+		@Bean
     		public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         		http
             			.csrf(csrf -> csrf.disable())  // Disable CSRF for tests
@@ -66,13 +93,18 @@ public class TrafficDataControllerTests {
     		}
 	}
 
-
-
+	/**
+	 * Logs registered ObjectMapper modules for debugging purposes.
+	 */
 	@Test
 	public void logObjectMapperModules() {
     		System.out.println("Registered Modules: " + objectMapper.getRegisteredModuleIds());
 	}
 
+	/**
+	 * Tests the creation of traffic data using the API.
+	 * Ensures that the response returns a valid JSON object with an assigned ID.
+	 * @throws Exception If the request fails.
 	@Test
 	@WithMockUser(username = "testuser", roles = {"USER"})  // Ensure role matches SecurityConfig
 	public void testCreateTrafficData() throws Exception {
